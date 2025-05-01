@@ -1,6 +1,6 @@
 import telebot
 
-TOKEN = '8035173244:AAFrlRube8Si38mdjwKZbJpWpVu-F_NPrRU'
+TOKEN = '8035173244:AAGYn4GXDuaJWQdAt4q2NrR473Ybppxs7oI'
 bot = telebot.TeleBot(TOKEN)
 
 # Har bir user uchun state saqlash
