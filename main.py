@@ -1,12 +1,14 @@
+import os
+from dotenv import load_dotenv
 import telebot
 
-TOKEN = '8035173244:AAGYn4GXDuaJWQdAt4q2NrR473Ybppxs7oI'
+# .env fayldan tokenni yuklab olish
+load_dotenv()
+TOKEN = os.getenv("TOKEN")
 bot = telebot.TeleBot(TOKEN)
 
-# Har bir user uchun state saqlash
 user_state = {}
 
-# Bosh menyu
 def main_menu():
     markup = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
     markup.row("📞 Telefon raqam", "📍 Manzil")
@@ -15,20 +17,12 @@ def main_menu():
     markup.row("👨‍🏫 Ustozlar")
     return markup
 
-# Orqaga tugmasi
-def back_button():
-    markup = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
-    markup.row("🔙 Orqaga")
-    return markup
-
-# Kurslar menyusi
 def course_menu():
     markup = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
     markup.row("🌐 Online", "🏫 Ofline")
     markup.row("🔙 Orqaga")
     return markup
 
-# Ustozlar menyusi
 def ustozlar_menu():
     markup = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
     markup.row("👨‍🏫 Sardorbek", "👨‍🏫 Nuroli")
@@ -49,31 +43,22 @@ def handle_message(message):
 
     if text == '📞 Telefon raqam':
         bot.send_message(chat_id, "📞 Telefon: 91 822 05 00")
-        user_state[chat_id] = "main"
 
     elif text == '📍 Manzil':
-               # Lokatsiya haqida matn
-        bot.send_message(
-            chat_id,
+        bot.send_message(chat_id,
             "📍 <b>Manzil:</b> Toshkent shahri, Navza metro yaqinida joylashgan <b>UzGlobal</b> o‘quv markazi.",
-            parse_mode="HTML",
+            parse_mode="HTML"
         )
-
-        # Xaritadagi lokatsiyani yuborish
         bot.send_location(chat_id, latitude=41.288880, longitude=69.224483)
-        user_state[chat_id] = "main"
 
     elif text == '👨‍💻 Admin bilan bog‘lanish':
         bot.send_message(chat_id, "👨‍💻 Admin: @mr_sardorbek_coder")
-        user_state[chat_id] = "main"
 
     elif text == '❓ Ko‘p beriladigan savollar':
         bot.send_message(chat_id, "❓ Hozircha savollar mavjud emas.")
-        user_state[chat_id] = "main"
 
     elif text == '💵 Narxlar':
         bot.send_message(chat_id, "💵 Narxlar: Belgilanmagan")
-        user_state[chat_id] = "main"
 
     elif text == '🎓 Kurslar':
         bot.send_message(chat_id, "🎓 Kurs turini tanlang:", reply_markup=course_menu())
@@ -81,11 +66,9 @@ def handle_message(message):
 
     elif text == '🌐 Online':
         bot.send_message(chat_id, "🌐 Online kurs narxi: 400 UZS")
-        user_state[chat_id] = "kurslar"
 
     elif text == '🏫 Ofline':
         bot.send_message(chat_id, "🏫 Ofline kurs narxi: 650 UZS")
-        user_state[chat_id] = "kurslar"
 
     elif text == '👨‍🏫 Ustozlar':
         bot.send_message(chat_id, "Quyidagi ustozlardan birini tanlang:", reply_markup=ustozlar_menu())
@@ -125,4 +108,5 @@ def handle_message(message):
     else:
         bot.send_message(chat_id, "Iltimos, menyudan tanlang.")
 
-bot.polling()
+if __name__ == "__main__":
+    bot.infinity_polling()
