@@ -1,0 +1,1 @@
+UzGlobal uchun bo't
